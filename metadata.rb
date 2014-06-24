@@ -1,0 +1,13 @@
+name             'sensu_admin'
+maintainer       ''
+maintainer_email ''
+license          ''
+description      'Installs/Configures sensu_admin'
+long_description 'Installs/Configures sensu_admin'
+version          '0.1.0'
+
+depends 'apt'
+depends 'application_ruby'
+depends 'ruby_build'
+depends 'runit'
+depends 'nginx'

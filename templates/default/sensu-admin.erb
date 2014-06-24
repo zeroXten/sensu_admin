@@ -1,0 +1,33 @@
+upstream sensu-admin-rails {
+  <% node.sensu_admin.unicorn.servers.each do |server| %>
+  server <%= server %> fail_timeout=0;
+  <% end %>
+}
+
+server {
+  listen                80;
+  server_name           _;
+  root                  <%= node.sensu_admin.path %>/current/public;
+
+  location / {
+    access_log          off;
+
+    proxy_redirect off;
+    proxy_set_header Host $host;
+
+    if (-f $request_filename) {
+      access_log          off;
+      expires             max;
+      break;
+    }
+
+    if (-f $request_filename.html) {
+      rewrite (.*) $1.html break;
+    }
+
+    if (!-f $request_filename) {
+      proxy_pass          http://sensu-admin-rails;
+      break;
+    }
+  }
+}
